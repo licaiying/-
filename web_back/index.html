@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="./js/utils/config.js"></script>
+    <script src="./js/utils/user.js"></script>
 </head>
 
 <body>
@@ -115,23 +117,11 @@
         // 1.退出功能
         // 点击id='tuichu'的标签，然后调用接口，实现退出
         $('#tuichu').click(function () {
-            $.post('http://localhost:8000/admin/logout', function (res) {
-                // console.log(res);  //{msg: "登出成功", code: 200}
-                alert(res.msg);
-                if (res.code == 200) {
-                    // 退出成功，跳转到登录页面（login.html）
-                    location.href = 'login.html';
-                }
-            });
+            user.logout();
         });
 
         // 2.获取管理员的信息
-        $.get('http://localhost:8000/admin/getuser', function (res) {
-            //    console.log(res);  // {msg: "获取成功", code: 200, data: {…}}
-            if (res.code == 200) {
-                $('.user_info').find('img').attr('src', res.data.user_pic).next('span').html('欢迎&nbsp;&nbsp;' + res.data.nickname);
-            }
-        });
+        user.getuser();
 
     </script>
 
