@@ -121,7 +121,12 @@
         });
 
         // 2.获取管理员的信息
-        user.getuser();
+        user.getuser(function (res) {
+            if (res.code == 200) {
+                // 获取管理员的头像和信息（渲染页面）
+                $('.user_info').find('img').attr('src', res.data.user_pic).next('span').html('欢迎&nbsp;&nbsp;' + res.data.nickname);
+            }
+        });
 
     </script>
 

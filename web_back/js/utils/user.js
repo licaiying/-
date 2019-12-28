@@ -34,13 +34,14 @@ var user = {
     },
 
     // 获取管理员信息功能
-    getuser: function () {
+    getuser: function (callback) {
         $.get(baseUrl + '/admin/getuser', function (res) {
             //    console.log(res);  // {msg: "获取成功", code: 200, data: {…}}
-            if (res.code == 200) {
-                // 获取管理员的头像和信息（渲染页面）
-                $('.user_info').find('img').attr('src', res.data.user_pic).next('span').html('欢迎&nbsp;&nbsp;' + res.data.nickname);
-            }
+            callback(res);
+            // if (res.code == 200) {
+            //     // 获取管理员的头像和信息（渲染页面）
+            //     $('.user_info').find('img').attr('src', res.data.user_pic).next('span').html('欢迎&nbsp;&nbsp;' + res.data.nickname);
+            // }
         });
     }
 
