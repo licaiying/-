@@ -29,12 +29,34 @@
             </form>
         </div>
 
-    </div> 
+    </div>
 
     <script src="./js/jquery-1.12.4.min.js"></script>
     <script>
-        // 
-    
+        // 获取数据，调用接口,登录首页
+        $('.input_sub').click(function (e) {
+            e.preventDefault();
+            // console.log(123)
+            var username = $('.input_txt').val().trim();
+            var password = $('.input_pass').val().trim();
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8000/admin/login',
+                data: {
+                    user_name: username,
+                    password: password
+                },
+                success: function (res) {
+                    // console.log(res); // {msg: "用户名或密码错误", code: 400}
+                    alert(res.msg);
+                    if (res.code == 200) {
+                        location.href = 'index.html'
+                    }
+                }
+            });
+        });
+
     </script>
 
 </body>
