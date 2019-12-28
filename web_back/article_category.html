@@ -105,24 +105,29 @@
     <script src="./js/utils/config.js"></script>
     <script src="./js/utils/category.js"></script>
 
+    <script type="text/html" id="moban">
+        {{each arr value key}}
+        <tr>
+            <td>{{value.name}}</td>
+            <td>{{value.slug}}</td>
+            <td class="text-center">
+                <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>    
+                <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
+
+    <script src="./js/template-web.js"></script>
+
     <script>
         // 获取文章分类
         category.show(function (res) {
             console.log(res); // {msg: "分类获取完毕", code: 200, data: Array(11)}
             // 渲染数据到页面
-            var str = '';
-            res.data.forEach(function (item) {
-                str += `
-               <tr>
-                        <td>${item.name}</td>
-                        <td>${item.slug}</td>
-                        <td class="text-center">
-                            <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>    
-                            <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-                        </td>
-                    </tr>
-               `
-            });
+            var str = template('moban', {
+                arr: res.data
+            })
             // 遍历结束后，将str放到tbody中
             $('tbody').html(str);
         });
