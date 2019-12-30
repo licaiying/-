@@ -112,7 +112,7 @@
             <td>{{value.slug}}</td>
             <td class="text-center">
                 <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>    
-                <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+                <a href="javascript:;" data-id={{value.id}} class="btn btn-danger btn-xs">删除</a>
             </td>
         </tr>
         {{/each}}
@@ -122,14 +122,34 @@
 
     <script>
         // 获取文章分类
-        category.show(function (res) {
-            console.log(res); // {msg: "分类获取完毕", code: 200, data: Array(11)}
-            // 渲染数据到页面
-            var str = template('moban', {
-                arr: res.data
-            })
-            // 遍历结束后，将str放到tbody中
-            $('tbody').html(str);
+        function loaddata() {
+            category.show(function (res) {
+                console.log(res); // {msg: "分类获取完毕", code: 200, data: Array(11)}
+                // 渲染数据到页面
+                var str = template('moban', {
+                    arr: res.data
+                });
+                // 遍历结束后，将str放到tbody中
+                $('tbody').html(str);
+            });
+        }
+        loaddata();
+    </script>
+
+    <script>
+        // 删除文章类别
+        // 注册点击事件（因为删除的是动态添加的元素，所以需用到事件委托）
+        $('body').on('click', '.btn-danger', function () {
+            // 获取id
+            var id = $(this).attr('data-id');
+            // 调用接口
+            category.delete(id, function (res) {
+                // console.log(res); // {msg: "删除成功", code: 200}
+                alert(res.msg);
+                if (res.code == 200) {
+                    loaddata();
+                }
+            });
         });
     </script>
 
