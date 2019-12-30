@@ -9,17 +9,34 @@ var category = {
     },
 
     // 2.新增文章类别的方法
-    add: function () {
-
+    add: function (name, slug, callback) {
+        $.post(
+            baseUrl + '/admin/category_add',
+            { name: name, slug: slug },
+            function (res) {
+                callback(res);
+            });
     },
 
     // 3.删除文章类别的方法
-    delete: function () {
-
+    delete: function (id, callback) {
+        $.post(baseUrl + '/admin/category_delete', { id: id }, function (res) {
+            callback(res);
+        });
     },
 
     // 4.修改(更新)文章类别的方法
-    updata: function () {
-
+    updata: function (id, name, slug, callback) {
+        $.post(
+            baseUrl + '/admin/category_edit',
+            {
+                id: id,
+                name: name,
+                slug: slug
+            },
+            function (res) {
+                callback(res);
+            }
+        );
     }
 };
