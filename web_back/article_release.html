@@ -27,24 +27,20 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3" placeholder="文章标题">
+                        <input type="email" name="title" class="form-control" id="inputEmail3" placeholder="文章标题">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
                     <div class="col-sm-10">
-                        <input type="file" id="exampleInputFile">
+                        <input type="file" name="cover" id="exampleInputFile">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
                     <div class="col-sm-4">
-                        <select class="form-control">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                        <select class="form-control" id="category" name="type">
+                            <!-- 这里放数据 -->
                         </select>
                     </div>
                 </div>
@@ -53,7 +49,7 @@
                     <div class="col-sm-4">
 
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="dateinput">
+                            <input type="text" name="date" class="form-control" placeholder="YYYY-MM-DD" id="dateinput">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button"
                                     onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i
@@ -66,7 +62,7 @@
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
                     <div class="col-sm-10">
                         <textarea class="form-control" id="rich_content" name="content" placeholder="文章内容">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda fugiat illo nihil molestias ab. Laborum eius non atque, totam sapiente quae obcaecati assumenda ratione inventore pariatur maiores, qui libero delectus.
+                           <!-- 这里放文本框中的内容 -->
                             </textarea>
                     </div>
                 </div>
@@ -79,6 +75,56 @@
             </form>
         </div>
     </div>
+
+    <script src="./js/utils/config.js"></script>
+    <script src="./js/utils/category.js"></script>
+    <script src="./js/utils/article.js"></script>
+    <script src="./js/template-web.js"></script>
+
+    <!-- 模板区域(拼接文章类别的内容) -->
+    <script type="text/html" id="feilei">
+        {{each arr value key}}
+        <option value="{{value.id}}">{{value.name}}</option>
+        {{/each}}
+    </script>
+
+    <script>
+        // 1.获取文章类别的内容
+        // 通过调用category.show() 获取所有的分类
+        category.show(function (res) {
+            console.log(res); // 所有的分类 // {msg: "分类获取完毕", code: 200, data: Array(12)}
+            var str = template('feilei', {
+                arr: res.data
+            });
+            $('#category').html(str);
+        });
+
+        // 2.点击“发布”按钮
+        // 2.1 获取所有表单找那个的值，因为有文件的上传，所以需使用FormData();（在此之前，给所有的表单加name属性）
+        $('.btn-success').click(function (e) {
+            e.preventDefault();
+            var form = $('form')[0];
+            var fd = new FormData(form);
+            // console.log(fd); // 到此为止，fd中包含了title/cover/type/content/date
+            // 给fd追加一个state项
+            fd.append('state', '已发布')
+            // 更改content
+            fd.set('content', tinyMCE.editors[0].getContent()); // 从网上查询的获取富文本编辑器的值的方法
+            console.log(fd);
+            // console.log(fd.get('title'));
+
+            // 2.2 调用接口，完成添加
+            article.add(fd, function (res) {
+                // console.log(res); // {msg: "封面不能为空哦", code: 400}
+                alert(res.msg);
+                if (res.code == 201) {
+                    location.href = 'article_list.html';
+                };
+            });
+
+        });
+
+    </script>
 
 </body>
 

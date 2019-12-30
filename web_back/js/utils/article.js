@@ -16,7 +16,16 @@ var article = {
 
 
     // 3.文章的添加
-    add: function () {
-
+    add: function (fd, callback) {
+        $.ajax({
+            type: 'POST',
+            url: baseUrl + '/admin/article_publish',
+            data: fd,
+            success: function (res) {
+                callback(res);
+            },
+            contentType: false,
+            processData: false
+        });
     }
 };
